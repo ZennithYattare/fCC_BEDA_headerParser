@@ -24,7 +24,9 @@ app.get("/", function (req, res) {
 // your first API endpoint...
 app.get("/api/whoami", (req, res) => {
 	// Define a GET route for the /api/whoami endpoint
-	const ipaddress = req.ip; // Get the IP address of the client from the request object
+	const ipaddress =
+		req.headers["x-forwarded-for"]?.split(",")[0] ||
+		req.socket.remoteAddress; // Get the IP address of the client from the request object
 	const language = req.headers["accept-language"]; // Get the preferred language of the client from the request headers
 	const software = req.headers["user-agent"]; // Get the user agent string of the client from the request headers
 	res.json({ ipaddress, language, software }); // Send a JSON response with the client's IP address, preferred language, and user agent string
